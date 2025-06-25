@@ -3,12 +3,17 @@ import { JOURNAL, SCRIPTS } from "./sandboxsources.mjs";
 console.log("App has started!");
 
 function speak(line) {
-    console.log(Object.fromEntries(this));
     console.log(`The ${this.type} rabbit says '${line}'`);
 }
 
 const exerciseFunction1 = function() {
-    console.log(Object.getPrototypeOf({}));
+    let whiteRabbit = {type: "white", speak};
+    let hungryRabbit = {type: "hungry", speak};
+
+    whiteRabbit.speak("Oh my ears and whiskers, how late it's getting!");
+    hungryRabbit.speak("I could sure use a carrot right now!");
+
+    speak.call(hungryRabbit, "Burp!");
 }
 
 const customWindowFunction = function(e) {
