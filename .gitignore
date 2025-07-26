@@ -1,2 +1,5 @@
 # Exclude VS Code Config
 .vscode/
+
+# Exclude PDF Files
+*.pdf
