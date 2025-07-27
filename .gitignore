@@ -3,3 +3,6 @@
 
 # Exclude PDF Files
 *.pdf
+
+# Exclude hintrc files
+.hintrc

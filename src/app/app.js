@@ -3,9 +3,10 @@ import { JOURNAL, SCRIPTS, ROADS, MAIL_ROUTE } from "../constants/sandboxsources
 console.log("App has started!");
 
 let jsonResponse = null;
+
 const exerciseFunction1 = function() {
 
-  const response = fetch('http://localhost:8085')
+  const response = fetch('http://localhost:8085/json')
   .then(response => {
     if (!response.ok) {
       throw new Error("Network response was not ok");
@@ -19,7 +20,7 @@ const exerciseFunction1 = function() {
 
     jsonResponse = data.message;
     console.log(data.message);
-    document.getElementById("bodytitle").innerHTML = jsonResponse;
+    // document.getElementById("bodytitle").innerHTML = jsonResponse;
     console.log("JSON Response:", Object.keys(data).at(0));
   })
   .catch(error => {
@@ -28,10 +29,67 @@ const exerciseFunction1 = function() {
   });
 }
 
+
 const exerciseFunction2 = function() {
+  console.log("Exercise Function 2: Fetching XML data");
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://localhost:8085/xml", true);
+  xhr.overrideMimeType("application/xml");
+
+  xhr.onload = function() {
+    if (xhr.status >= 200 && xhr.status < 300) {
+      console.log("XML Response received from server");
+      const xmlResponse = xhr.responseXML;
+
+      console.log("XML Response Received!");
+      console.log(xmlResponse);
+    
+      const messageElement = xmlResponse.getElementsByTagName("Message")[0].textContent;
+      console.log("Message from XML:", messageElement);
+    } else {
+      throw new Error("Failed to fetch XML data: " + xhr.statusText);
+    }
+  }
+e
+  console.log("Exercise Function 2: Fetching XML data");
+  xhr.send();
 }
 
 const exerciseFunction3 = function() {
+  console.log("Exercise Function 3: Fetching PDF data");
+  const response = fetch('http://localhost:8085/pdf')
+  .then(response => {
+    console.log("Response received from server for PDF");
+    console.log(response);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    
+    return response.blob();
+  })
+  .then(blob => {
+    console.log("Blob received from server");
+    console.log(blob);
+
+    const url = URL.createObjectURL(blob);
+
+    const pdfFrame = document.getElementById("pdf");
+    pdfFrame.src = url;
+    
+    pdfFrame.onload = function() {
+      console.log("PDF loaded successfully in iframe");
+
+      setTimeout(() => {
+        pdfFrame.contentWindow.print();
+        URL.revokeObjectURL(url);
+      }, 1000); // Clear the iframe after 1 second
+    }
+
+  })
+  .catch(error => {
+    console.error("There was a problem with the fetch operation for PDF");
+    console.error(error);
+  });
 }
 
 const exerciseFunction4 = function() {
